@@ -122,6 +122,18 @@ class Lesson < ActiveRecord::Base
   #... (your code) ...
 end
 ```
+Then, create a module mixin that adds `belongs_to` to the survey model based on your class name
+```ruby
+# app/models/survey/belongs_to_lesson.rb
+module Survey
+  module BelongsToLesson
+    extend ActiveSupport::Concern
+    included do
+      belongs_to :lesson
+    end
+  end
+end
+```
 This will dynamically add the association to the survey model. However, you will need to generate a migration in order to add the foreign key to the `survey_surveys` table like so:
 ```ruby
 class AddLessonIdToSurveySurveys < ActiveRecord::Migration
