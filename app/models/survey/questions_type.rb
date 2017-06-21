@@ -1,5 +1,5 @@
 class Survey::QuestionsType
-  @@questions_types = { general: 1, free_response: 2 }
+  @@questions_types = { multiple_choice: 1, free_response: 2, multi_select: 3 }
 
   def self.questions_types
     @@questions_types
