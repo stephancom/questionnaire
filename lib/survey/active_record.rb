@@ -14,6 +14,10 @@ module Survey
       def has_many_surveys
         has_many :surveys, class_name: ::Survey::Survey
       end
+
+      def has_one_survey
+        has_one :survey, class_name: ::Survey::Survey
+      end
     end
   end
 end
