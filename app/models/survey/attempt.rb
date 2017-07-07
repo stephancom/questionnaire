@@ -67,11 +67,11 @@ class Survey::Attempt < ActiveRecord::Base
   end
 
   def collect_scores
-    multi_select_questions = Survey::Survey.joins(sections: :questions)
-                                           .where(id: survey.id,
-                                                  survey_questions: {
-                                                    questions_type_id: Survey::QuestionsType.multi_select
-                                                  })
+    multi_select_questions = Survey::Question.joins(:section)
+                                             .where(survey_sections: { survey_id: survey.id },
+                                                    survey_questions: {
+                                                      questions_type_id: Survey::QuestionsType.multi_select
+                                                    })
     if multi_select_questions.empty? # No multi-select questions
       raw_score = answers.map(&:value).reduce(:+)
       self.score = raw_score
