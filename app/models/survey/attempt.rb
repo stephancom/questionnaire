@@ -1,57 +1,57 @@
-class Survey::Attempt < ActiveRecord::Base
+# frozen_string_literal: true
 
-  self.table_name = "survey_attempts"
+class Survey::Attempt < ActiveRecord::Base
+  self.table_name = 'survey_attempts'
 
   # relations
 
   has_many :answers
   belongs_to :survey
-  belongs_to :participant, :polymorphic => true
+  belongs_to :participant, polymorphic: true
 
-  #rails 3 attr_accessible support
+  # rails 3 attr_accessible support
   if Rails::VERSION::MAJOR < 4
     attr_accessible :participant_id, :survey_id, :answers_attributes, :survey, :winner, :participant
   end
-  
+
   # validations
   validates :participant_id, :participant_type,
-    :presence => true
-    
-  accepts_nested_attributes_for :answers,
-    :reject_if =>
-      ->(q) { q[:question_id].blank? && q[:option_id].blank? }, 
-      allow_destroy: true
+            presence: true
 
-  #scopes
+  accepts_nested_attributes_for :answers,
+                                reject_if: ->(q) { q[:question_id].blank? && q[:option_id].blank? },
+                                allow_destroy: true
+
+  # scopes
 
   scope :for_survey, ->(survey) {
-  where(:survey_id => survey.try(:id))
+    where(survey_id: survey.try(:id))
   }
 
   scope :exclude_survey, ->(survey) {
-  where("NOT survey_id = #{survey.try(:id)}")
+    where("NOT survey_id = #{survey.try(:id)}")
   }
 
   scope :for_participant, ->(participant) {
-  where(:participant_id => participant.try(:id),
-    :participant_type => participant.class)
+    where(participant_id: participant.try(:id),
+          participant_type: participant.class)
   }
 
-  scope :wins, -> { where(:winner => true) }
-  scope :looses, -> { where(:winner => false) }
-  scope :scores, -> { order("score DESC") }
+  scope :wins, -> { where(winner: true) }
+  scope :looses, -> { where(winner: false) }
+  scope :scores, -> { order('score DESC') }
 
   # callbacks
 
-  validate :check_number_of_attempts_by_survey, :on => :create
+  validate :check_number_of_attempts_by_survey, on: :create
   before_create :collect_scores
 
   def correct_answers
-    self.answers.where(:correct => true)
+    answers.where(correct: true)
   end
 
   def incorrect_answers
-    self.answers.where(:correct => false)
+    answers.where(correct: false)
   end
 
   def self.high_score
@@ -62,13 +62,29 @@ class Survey::Attempt < ActiveRecord::Base
 
   def check_number_of_attempts_by_survey
     attempts = self.class.for_survey(survey).for_participant(participant)
-    upper_bound = self.survey.attempts_number
-    if attempts.size >= upper_bound and upper_bound != 0
-      errors.add(:questionnaire_id, "Number of attempts exceeded")
-    end
+    upper_bound = survey.attempts_number
+    errors.add(:questionnaire_id, 'Number of attempts exceeded') if (attempts.size >= upper_bound) && upper_bound.nonzero?
   end
 
   def collect_scores
-    self.score = self.answers.map(&:value).reduce(:+)
+    multi_select_questions = Survey::Survey.joins(sections: :questions)
+                                           .where(id: survey.id,
+                                                  survey_questions: {
+                                                    questions_type_id: Survey::QuestionsType.multi_select
+                                                  })
+    if multi_select_questions.empty? # No multi-select questions
+      raw_score = answers.map(&:value).reduce(:+)
+      self.score = raw_score
+    else
+      multi_select_question_ids = multi_select_questions.map(&:id)
+      # Initial score without multi-select questions
+      raw_score = answers.where.not(question_id: multi_select_question_ids).reduce(:+)
+      options = question.options
+      multi_select_questions.each do |question|
+        correct_question_answers = answers.where(question_id: question.id, correct: true)
+        raw_score += correct_question_answers.map(&:value).reduce(:+).fdiv options.correct.map(&:weight).reduce(:+)
+        self.score = raw_score
+      end
+    end
   end
 end
