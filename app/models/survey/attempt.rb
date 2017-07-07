@@ -63,7 +63,7 @@ class Survey::Attempt < ActiveRecord::Base
   def check_number_of_attempts_by_survey
     attempts = self.class.for_survey(survey).for_participant(participant)
     upper_bound = survey.attempts_number
-    errors.add(:questionnaire_id, 'Number of attempts exceeded') if (attempts.size >= upper_bound) && upper_bound.nonzero?
+    errors.add(:questionnaire_id, 'Number of attempts exceeded') if attempts.size >= upper_bound && upper_bound.nonzero?
   end
 
   def collect_scores
@@ -76,13 +76,20 @@ class Survey::Attempt < ActiveRecord::Base
       raw_score = answers.map(&:value).reduce(:+)
       self.score = raw_score
     else
-      multi_select_question_ids = multi_select_questions.map(&:id)
       # Initial score without multi-select questions
-      raw_score = answers.where.not(question_id: multi_select_question_ids).reduce(:+)
+      raw_score = answers.where.not(question_id: multi_select_questions.map(&:id)).reduce(:+)
       options = question.options
       multi_select_questions.each do |question|
         correct_question_answers = answers.where(question_id: question.id, correct: true)
-        raw_score += correct_question_answers.map(&:value).reduce(:+).fdiv options.correct.map(&:weight).reduce(:+)
+        correct_options_sum = options.correct.map(&:weight).reduce(:+)
+        correct_percentage = correct_question_answers.map(&:value)
+                                                     .reduce(:+)
+                                                     .fdiv(correct_options_sum)
+        raw_score += correct_percentage
+        if correct_percentage == 1
+          option_value = 1 / options.count
+          raw_score -= (option_value * answers.where.not(correct: true).count) # correct could be nil so use where.not
+        end
         self.score = raw_score
       end
     end
