@@ -78,8 +78,8 @@ class Survey::Attempt < ActiveRecord::Base
     else
       # Initial score without multi-select questions
       raw_score = answers.where.not(question_id: multi_select_questions.map(&:id)).reduce(:+)
-      options = question.options
       multi_select_questions.each do |question|
+        options = question.options
         correct_question_answers = answers.where(question_id: question.id, correct: true)
         correct_options_sum = options.correct.map(&:weight).reduce(:+)
         correct_percentage = correct_question_answers.map(&:value)
