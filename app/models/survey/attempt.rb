@@ -92,7 +92,7 @@ class Survey::Attempt < ActiveRecord::Base
         raw_score += correct_percentage
         if correct_percentage == 1
           option_value = 1 / options.count.to_f
-          raw_score -= (option_value * answers.where.not(correct: true).count) # correct could be nil so use where.not
+          raw_score -= (option_value * answers.where(question_id: question.id, correct: false).count)
         end
         self.score = raw_score
         save
