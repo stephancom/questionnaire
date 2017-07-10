@@ -54,6 +54,12 @@ class Survey::Attempt < ActiveRecord::Base
     answers.where(correct: false)
   end
 
+  def collect_scores!
+    collect_scores
+    save!
+  end
+  
+
   def self.high_score
     scores.first.score
   end
