@@ -5,7 +5,7 @@ class Survey::Attempt < ActiveRecord::Base
 
   # relations
 
-  has_many :answers
+  has_many :answers, dependent: :destroy
   belongs_to :survey
   belongs_to :participant, polymorphic: true
 
