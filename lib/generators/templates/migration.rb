@@ -32,7 +32,7 @@ class CreateSurvey < ActiveRecord::Migration
     create_table :survey_attempts do |t|
       t.belongs_to :participant, :polymorphic => true
       t.integer    :survey_id
-      t.boolean    :winner
+      t.boolean    :winner, null: false, default: false
       t.integer    :score
 
       t.timestamps
@@ -42,7 +42,7 @@ class CreateSurvey < ActiveRecord::Migration
       t.integer    :attempt_id
       t.integer    :question_id
       t.integer    :option_id
-      t.boolean    :correct
+      t.boolean    :correct, null: false, default: false
       t.timestamps
     end
   end
