@@ -33,7 +33,7 @@ class CreateSurvey < ActiveRecord::Migration
       t.belongs_to :participant, :polymorphic => true
       t.integer    :survey_id
       t.boolean    :winner, null: false, default: false
-      t.integer    :score
+      t.decimal    :score
 
       t.timestamps
     end
