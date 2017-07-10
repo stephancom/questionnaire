@@ -91,6 +91,7 @@ class Survey::Attempt < ActiveRecord::Base
           raw_score -= (option_value * answers.where.not(correct: true).count) # correct could be nil so use where.not
         end
         self.score = raw_score
+        save
       end
     end
   end
