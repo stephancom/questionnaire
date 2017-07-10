@@ -56,9 +56,9 @@ class Survey::Attempt < ActiveRecord::Base
 
   def collect_scores!
     collect_scores
-    save!
+    save
   end
-  
+
 
   def self.high_score
     scores.first.score
