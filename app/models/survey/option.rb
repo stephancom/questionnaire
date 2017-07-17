@@ -3,6 +3,7 @@ class Survey::Option < ActiveRecord::Base
   self.table_name = "survey_options"
   #relations
   belongs_to :question
+  has_many :answers
   
   #rails 3 attr_accessible support
   if Rails::VERSION::MAJOR < 4
