@@ -4,6 +4,7 @@ class Survey::Question < ActiveRecord::Base
   # relations
   has_many   :options
   has_many   :predefined_values
+  has_many   :answers
   belongs_to :section
   
   #rails 3 attr_accessible support
