@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePredefinedValuesTable < ActiveRecord::Migration
   def change
     create_table :survey_predefined_values do |t|
@@ -5,10 +7,10 @@ class CreatePredefinedValuesTable < ActiveRecord::Migration
       t.string  :name
       t.string  :locale_name
       t.integer :question_id
-      
+
       t.timestamps
     end
-    
+
     add_column :survey_answers, :predefined_value_id, :integer
   end
 end

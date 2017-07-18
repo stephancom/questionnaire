@@ -19,4 +19,11 @@ class AttemptTest < ActiveSupport::TestCase
     assert_not_equal (NUMBER_OF_ATTEMPTS + 1), number_of_current_attempts(user, survey)
     assert_equal NUMBER_OF_ATTEMPTS, number_of_current_attempts(user, survey)
   end
+
+  test 'should compute the score correctly for a perfect attempt' do
+    user = create_user
+    survey = create_survey_with_sections(4) # These are multi-choice questions and there are 5 options per question
+    attempt = create_attempt_for(user, survey, all: :right)
+    assert_equal 20, attempt.score
+  end
 end

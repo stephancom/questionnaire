@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SurveyTest < ActiveSupport::TestCase
   test 'should not create a valid survey without sections' do
     survey = create_survey
@@ -37,7 +39,7 @@ class SurveyTest < ActiveSupport::TestCase
   test 'should not save survey without all the needed fields' do
     survey_without_name = create_survey(name: nil)
     survey_without_description = create_survey(description: nil)
-    %w(name description).each do |suffix|
+    %w[name description].each do |suffix|
       should_not_be_persisted eval("survey_without_#{suffix}")
     end
   end

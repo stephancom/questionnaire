@@ -1,5 +1,6 @@
-Dummy::Application.routes.draw do
+# frozen_string_literal: true
 
-  root :to => "welcome#index"
+Dummy::Application.routes.draw do
+  root to: 'welcome#index'
   resources :users
 end

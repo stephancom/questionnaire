@@ -1,7 +1,7 @@
+# frozen_string_literal: true
+
 def number_of_current_attempts(participant, survey)
-  if participant.respond_to?(:for_survey)
-    participant.for_survey(survey).size
-  end
+  participant.for_survey(survey).size if participant.respond_to?(:for_survey)
 end
 
 def participant_score(user, survey)
@@ -11,7 +11,6 @@ end
 def participant_with_more_right_answers(survey)
   survey.attempts.scores.first.participant
 end
-
 
 def participant_with_more_wrong_answers(survey)
   survey.attempts.scores.last.participant

@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 class CreateSurvey < ActiveRecord::Migration
   def self.up
-
     # survey surveys logic
     create_table :survey_surveys do |t|
       t.string  :name
       t.text    :description
-      t.integer :attempts_number, :default => 0
-      t.boolean :finished, :default => false
-      t.boolean :active, :default => true
+      t.integer :attempts_number, default: 0
+      t.boolean :finished, default: false
+      t.boolean :active, default: true
 
       t.timestamps
     end
@@ -21,7 +22,7 @@ class CreateSurvey < ActiveRecord::Migration
 
     create_table :survey_options do |t|
       t.integer :question_id
-      t.integer :weight, :default => 0
+      t.integer :weight, default: 0
       t.string :text
       t.boolean :correct
 
@@ -30,7 +31,7 @@ class CreateSurvey < ActiveRecord::Migration
 
     # survey answer logic
     create_table :survey_attempts do |t|
-      t.belongs_to :participant, :polymorphic => true
+      t.belongs_to :participant, polymorphic: true
       t.integer    :survey_id
       t.integer    :score
     end
