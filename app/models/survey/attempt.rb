@@ -59,7 +59,6 @@ class Survey::Attempt < ActiveRecord::Base
     save
   end
 
-
   def self.high_score
     scores.first.score
   end

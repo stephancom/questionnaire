@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Survey
   module BelongsToLesson
     extend ActiveSupport::Concern

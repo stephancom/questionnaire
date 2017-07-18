@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Survey::QuestionsType
   @@questions_types = { multiple_choice: 2, free_response: 9, multi_select: 1 }
 

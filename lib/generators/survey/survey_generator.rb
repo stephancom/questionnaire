@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 module Survey
   class SurveyGenerator < Rails::Generators::Base
+    source_root File.expand_path('../../templates', __FILE__)
 
-    source_root File.expand_path("../../templates", __FILE__)
-
-    TEMPLATES = ["active_admin", "rails_admin", "plain", "routes"]
+    TEMPLATES = %w[active_admin rails_admin plain routes].freeze
 
     argument  :arguments,
-              :type => :array,
-              :default => [],
-              :banner => "< #{TEMPLATES.join("|")} > [options]"
+              type: :array,
+              default: [],
+              banner: "< #{TEMPLATES.join('|')} > [options]"
 
     def create_resolution
       strategy = arguments.first
@@ -23,20 +24,20 @@ module Survey
     private
 
     def generate_active_admin_resolution
-      copy_file "active_admin.rb", "app/admin/survey.rb"
+      copy_file 'active_admin.rb', 'app/admin/survey.rb'
     end
 
     def generate_rails_admin_resolution
-      copy_file "rails_admin.rb", "config/initializers/survey_rails_admin.rb"
+      copy_file 'rails_admin.rb', 'config/initializers/survey_rails_admin.rb'
     end
 
     def generate_plain_resolution
       scope = get_scope
-      template "survey_plain.rb", "app/controllers/#{scope}/surveys_controller.rb"
-      template "attempts_plain.rb", "app/controllers/#{scope}/attempts_controller.rb"
-      template "helper.rb", "app/helpers/#{scope}/surveys_helper.rb"
-      directory "survey_views", "app/views/#{scope}/surveys", :recursive => true
-      directory "attempts_views", "app/views/#{scope}/attempts", :recursive => true
+      template 'survey_plain.rb', "app/controllers/#{scope}/surveys_controller.rb"
+      template 'attempts_plain.rb', "app/controllers/#{scope}/attempts_controller.rb"
+      template 'helper.rb', "app/helpers/#{scope}/surveys_helper.rb"
+      directory 'survey_views', "app/views/#{scope}/surveys", recursive: true
+      directory 'attempts_views', "app/views/#{scope}/attempts", recursive: true
       generate_routes_for(scope)
     end
 
@@ -57,7 +58,7 @@ module Survey
       say "Generation of #{argument.capitalize} Template Complete :) enjoy Survey", :green
     end
 
-    def generate_routes_for(namespace, conditional=nil)
+    def generate_routes_for(namespace, _conditional = nil)
       content = <<-CONTENT
 
   namespace :#{namespace} do
@@ -65,13 +66,12 @@ module Survey
     resources :attempts, :only => [:new, :create]
   end
 CONTENT
-       inject_into_file "config/routes.rb", "\n#{content}",
-            :after => "#{Rails.application.class.to_s}.routes.draw do"
+      inject_into_file 'config/routes.rb', "\n#{content}",
+                       after: "#{Rails.application.class}.routes.draw do"
     end
 
     def get_scope
-      arguments.size == 1 ? "admin" : arguments[1].split(":").last
+      arguments.size == 1 ? 'admin' : arguments[1].split(':').last
     end
-
   end
 end

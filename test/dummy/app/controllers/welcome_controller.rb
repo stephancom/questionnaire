@@ -1,6 +1,7 @@
-class WelcomeController < ApplicationController
+# frozen_string_literal: true
 
+class WelcomeController < ApplicationController
   def index
-    render :text => "HELLO WORLD"
+    render text: 'HELLO WORLD'
   end
 end

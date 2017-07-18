@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/test_case'
 
 class ActiveSupport::TestCase
@@ -18,7 +20,7 @@ class ActiveSupport::TestCase
   end
 
   def assert_not_blank(assertion)
-    assert !assertion.blank?
+    assert assertion.present?
   end
 
   def assert_not_nil(assertion)
