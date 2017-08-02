@@ -34,7 +34,7 @@ class Survey::Attempt < ActiveRecord::Base
 
   scope :for_participant, ->(participant) {
     where(participant_id: participant.try(:id),
-          participant_type: participant.class)
+          participant_type: participant.class.to_s)
   }
 
   scope :wins, -> { where(winner: true) }
