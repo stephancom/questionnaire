@@ -35,6 +35,11 @@ or
 gem 'questionnaire_engine', github: 'dr-click/questionnaire', branch: 'master', :require=>"survey"
 
 ```
+or use this for Rails 5
+```ruby
+gem 'questionnaire_engine', github: 'clearfunction/questionnaire', branch: 'master', :require=>"survey"
+
+```
 Then run bundle to install the Gem:
 ```sh
 bundle install
@@ -44,6 +49,13 @@ Now generate and run migrations:
 rails generate survey:install
 
 bundle exec rake db:migrate
+```
+
+## Important notice for Rails 5.1
+Add Rails version to all generated migrations. Example
+
+```ruby
+class CreateSurvey < ActiveRecord::Migration # change to: class CreateSurvey < ActiveRecord::Migration[5.1]
 ```
 
 ## Getting started with Survey
