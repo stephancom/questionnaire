@@ -51,6 +51,13 @@ rails generate survey:install
 bundle exec rake db:migrate
 ```
 
+## Important notice for Rails 5.1
+Add Rails version to all generated migrations. Example
+
+```ruby
+class CreateSurvey < ActiveRecord::Migration # change to: class CreateSurvey < ActiveRecord::Migration[5.1]
+```
+
 ## Getting started with Survey
 
 ## Survey inside your models
