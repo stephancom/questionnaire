@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateSurvey < ActiveRecord::Migration
+class CreateSurvey < ActiveRecord::Migration[4.2]
   def self.up
     # survey surveys logic
     create_table :survey_surveys do |t|

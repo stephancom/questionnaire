@@ -13,10 +13,8 @@ class SectionTest < ActiveSupport::TestCase
     assert_equal survey.sections.first.questions.size, num_questions
   end
 
-  test 'should not save section without all the needed fields' do
+  test 'should not save section without name' do
     section_without_name = create_section(name: nil)
-    %w[name].each do |suffix|
-      should_not_be_persisted eval("section_without_#{suffix}")
-    end
+    should_not_be_persisted section_without_name
   end
 end

@@ -12,7 +12,7 @@ require 'pry'
 Rails.backtrace_cleaner.remove_silencers!
 
 # Run any available migration
-ActiveRecord::MigrationContext.new(File.expand_path('../dummy/db/migrate/', __FILE__))
+ActiveRecord::MigrationContext.new(File.expand_path('../dummy/db/migrate/', __FILE__)).migrate
 
 # Load support files
 # Add support to load paths so we can overwrite broken webrat setup

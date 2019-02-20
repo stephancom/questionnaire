@@ -57,7 +57,7 @@ def correct_option_attributes
 end
 
 def create_attempt(opts = {})
-  attempt = Survey::Attempt.create do |t|
+  Survey::Attempt.create do |t|
     t.survey = opts.fetch(:survey, nil)
     t.participant = opts.fetch(:user, nil)
     opts.fetch(:options, []).each do |option|

@@ -36,12 +36,14 @@ class SurveyTest < ActiveSupport::TestCase
     should_not_be_persisted survey
   end
 
-  test 'should not save survey without all the needed fields' do
+  test 'should not save survey without name' do
     survey_without_name = create_survey(name: nil)
+    should_not_be_persisted survey_without_name
+  end
+
+  test 'should not save survey without description' do
     survey_without_description = create_survey(description: nil)
-    %w[name description].each do |suffix|
-      should_not_be_persisted eval("survey_without_#{suffix}")
-    end
+    should_not_be_persisted survey_without_description
   end
 
   test 'should have the correct associations via "has_many_surveys"' do

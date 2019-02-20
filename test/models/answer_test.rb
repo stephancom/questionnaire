@@ -114,7 +114,7 @@ class AnswerTest < ActiveSupport::TestCase
 
     should_be_persisted survey
     should_be_persisted answer_try_1
-    assert_equal answer_try_1.option_text, nil
+    assert_nil answer_try_1.option_text
   end
 
   test 'should create an answer with options with single_choice type, and text field should be empty' do
@@ -123,7 +123,7 @@ class AnswerTest < ActiveSupport::TestCase
 
     should_be_persisted survey
     should_be_persisted answer_try_1
-    assert_equal answer_try_1.option_text, nil
+    assert_nil answer_try_1.option_text
   end
 
   test 'should create an answer with a predefined_value_id field for single_choice type' do

@@ -124,6 +124,7 @@ GEM
     rainbow (2.2.2)
       rake
     rake (12.3.1)
+    rb-readline (0.5.5)
     rdoc (4.0.1)
       json (~> 1.4)
     rubocop (0.49.1)
@@ -162,6 +163,7 @@ DEPENDENCIES
   pry-rails
   questionnaire_engine!
   rake
+  rb-readline (~> 0.5.5)
   rdoc
   rubocop
   sqlite3
@@ -170,4 +172,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   1.16.2
+   1.16.6
