@@ -23,7 +23,7 @@ class Survey::Survey < ActiveRecord::Base
 
   # validations
   validates :description, :name, presence: true, allow_blank: false
-  validate  :check_active_requirements
+  validate  :check_active_requirements, if: Proc.new { |survey| survey.active }
 
   # returns all the correct options for current surveys
   def correct_options

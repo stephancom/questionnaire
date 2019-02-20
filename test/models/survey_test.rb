@@ -1,12 +1,24 @@
 # frozen_string_literal: true
 
 class SurveyTest < ActiveSupport::TestCase
-  test 'should not create a valid survey without sections' do
-    survey = create_survey
+  test 'should create a valid inactive survey without sections' do
+    survey = create_survey(active: false)
+    should_be_persisted survey
+  end
+
+  test 'should not create an valid active survey without sections' do
+    survey = create_survey(active: true)
     should_not_be_persisted survey
   end
 
-  test 'should not create a  survey with active flag true and empty questions collection' do
+  test 'should not allow a survey without sections to be marked active' do
+    survey = create_survey(active: false)
+    should_be_true survey.valid?
+    survey.active = true
+    should_be_false survey.valid?
+  end
+
+  test 'should not create a survey with active flag true and empty questions collection' do
     surveyA = create_survey(active: true)
     surveyB = create_survey_with_sections(2)
     surveyB.active = true
